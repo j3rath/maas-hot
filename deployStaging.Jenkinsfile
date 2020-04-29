@@ -1,3 +1,5 @@
+@Library('ace@master')
+
 def tagMatchRules = [
   [
     "meTypes": [
@@ -20,6 +22,22 @@ pipeline {
         label 'kubegit'
     }
     stages {
+	    stage('DT send deploy event') {
+		 steps {
+			 container("curl") {
+				 script {
+					def status = pushDynatraceDeploymentEvent (
+					 tagRule : tagMatchRules,
+					 deploymentVersion: "${env.BUILD}",
+					 customProperties : [
+                        [key: 'Jenkins Build Number', value: "${env.BUILD_ID}"],
+                        [key: 'Git commit', value: "${env.GIT_COMMIT}"]
+					]
+                )
+            }
+        }
+    }
+}
         stage('Update Deployment and Service specification') {
             steps {
                 script {
