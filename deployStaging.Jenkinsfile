@@ -43,7 +43,7 @@ pipeline {
 			container("kubectl") {
 				 script {
 			 // Get IP of service
-			 env.SERVICE_IP = "ace-box""
+			 env.SERVICE_IP = "ace-box"
 			 env.SERVIVE_PORT = sh(script: 'kubectl -n staging get svc simplenodeservice -o jsonpath={.spec.ports[0].nodePort}\''), , returnStdout: true).trim()
           }
         }
