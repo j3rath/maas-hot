@@ -38,27 +38,27 @@ pipeline {
 				}
 			}
 		}
-		stage('DT create synthetic monitor') {			
-			steps {
-			container("kubectl") {
-				 script {
-			 // Get IP of service
-			 env.SERVICE_IP = "ace-box"
-			 env.SERVIVE_PORT = sh(script: 'kubectl -n staging get svc simplenodeservice -o \'jsonpath={.spec.ports[0].nodePort}\'', , returnStdout: true).trim()
-          }
+		stage('DT create synthetic monitor') {
+            steps {
+                container("kubectl") {
+                    script {
+                        // Get IP of service
+                        env.SERVICE_IP = "ace-box"
+                        env.SERVICE_PORT = sh(script: 'kubectl -n staging get svc ${APP_NAME} -o \'jsonpath={.spec.ports[0].nodePort}\'', , returnStdout: true).trim()
+                    }
+                }
+                container("curl") {
+                    script {
+                        def status = dt_createUpdateSyntheticTest (
+                        testName : "simpleproject.staging.${env.APP_NAME}",
+                        url : "http://${SERVICE_IP}:${SERVICE_PORT}/api/invoke",
+                        method : "GET",
+                        location : "SYNTHETIC_LOCATION-E707C69C21D14BA7"
+                        )
+                    }
+                }
+            }
         }
-        container("curl") {
-          script {
-            def status = dt_createUpdateSyntheticTest (
-              testName : "simpleproject.staging.${env.APP_NAME}",
-              url : "http://${SERVICE_IP}:${SERVICE_PORT}/api/invoke",
-              method : "GET",
-              location : "SYNTHETIC_LOCATION-E707C69C21D14BA7"
-            )
-          }
-        }
-      }
-    }
         stage('Update Deployment and Service specification') {
             steps {
                 script {
