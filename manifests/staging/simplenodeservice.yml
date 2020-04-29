@@ -18,14 +18,14 @@ spec:
     spec:
       containers:
       - name: simplenodeservice
-        image: localhost:32000/ace/simplenodeservice:3.0.0-10
+        image: localhost:32000/ace/simplenodeservice:3.0.0-14
         env:
         - name: JAVA_OPTS
           value: -Xms128m -Xmx512m -XX:PermSize=128m -XX:MaxPermSize=128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
         - name: DT_TAGS
           value: "DT_TAGS_PLACEHOLDER"
         - name: DT_CUSTOM_PROP
-          value: "Environment=Staging Build=0.2 FriendlyName=simplenode SERVCE_TYPE=Frontend SCM=https://github.com/j3rath/maas-hot.git Branch=origin/master Build=3 Image=localhost:32000/ace/simplenodeservice:3.0.0-10 "
+          value: "Environment=Staging Build=0.2 FriendlyName=simplenode SERVCE_TYPE=Frontend SCM=https://github.com/j3rath/maas-hot.git Branch=origin/master Build=3 Image=localhost:32000/ace/simplenodeservice:3.0.0-14 "
         resources:
           limits:
             cpu: 500m
